@@ -38,27 +38,36 @@ def privacy(request):
 
 @csrf_exempt
 def webhook(request):
-
-    try:    event_type = request.headers['X-GitHub-Event']
-    except: return HttpResponseBadRequest('Failed to identify event type')
-    try:    event = json.loads(request.body)
-    except: return HttpResponseBadRequest('Failed to parse request body as JSON')
-    try:    installation_id = event['installation']['id']
-    except: return HttpResponseBadRequest('Failed to identify installation')
-    try:    org_repo = event['repository']['full_name']
-    except: return HttpResponseBadRequest('Failed to identify repository')
-    try:    event_subtype= event['action']
-    except: return HttpResponseBadRequest('Failed to identify event subtype')
-    if (event_type, event_subtype) not in (('issues', 'opened'), ('issues', 'edited')):
-        return JsonResponse({
-            'ignored': f'{event_type}.{event_subtype}'
-        })
-    if 'issue' not in event:
-        return HttpResponseBadRequest('Malformed POST body - no issue')
-    if 'number' not in event['issue']:
-        return HttpResponseBadRequest('Malformed POST body - no issue number')
-    if 'body' not in event['issue']:
-        return HttpResponseBadRequest('Malformed POST body - no issue body')
+try:
+    event_type = request.headers['X-GitHub-Event']
+except:
+    return HttpResponseBadRequest('Failed to identify event type')
+try:
+    event = json.loads(request.body)
+except:
+    return HttpResponseBadRequest('Failed to parse request body as JSON')
+try:
+    installation_id = event['installation']['id']
+except:
+    return HttpResponseBadRequest('Failed to identify installation')
+try:
+    org_repo = event['repository']['full_name']
+except:
+    return HttpResponseBadRequest('Failed to identify repository')
+try:
+    event_subtype= event['action']
+except:
+    return HttpResponseBadRequest('Failed to identify event subtype')
+if (event_type, event_subtype) not in (('issues', 'opened'), ('issues', 'edited')):
+    return JsonResponse({
+        'ignored': f'{event_type}.{event_subtype}'
+    })
+if 'issue' not in event:
+    return HttpResponseBadRequest('Malformed POST body - no issue')
+if 'number' not in event['issue']:
+    return HttpResponseBadRequest('Malformed POST body - no issue number')
+if 'body' not in event['issue']:
+    return HttpResponseBadRequest('Malformed POST body - no issue body')
     body = event['issue']['body'] or ''  # body can be None
     issue_number = event['issue']['number']
     all_lines = body.splitlines()
