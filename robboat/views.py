@@ -92,7 +92,6 @@ def handle_ignored(repo, event):
         'ignored': f"{event['X-GitHub-Event']}.{event['action']}"
     })
 
-
 def handle_issues_opened(repo, event):
     if 'issue' not in event:
         return HttpResponseBadRequest('Malformed POST body - no issue')
@@ -143,6 +142,9 @@ def handle_issues_opened(repo, event):
     return JsonResponse({
         'filespec': filespec.groups(),
         'instruction': instruction,
+def handle_review_comment_created(repo, event):
+    pass
+
     })
 
 handle_issues_edited = handle_issues_opened
