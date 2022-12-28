@@ -38,7 +38,6 @@ def privacy(request):
 
 @csrf_exempt
 def webhook(request):
-
     try:    event_type = request.headers['X-GitHub-Event']
     except: return HttpResponseBadRequest('Failed to identify event type')
     try:    event = json.loads(request.body)
@@ -50,9 +49,7 @@ def webhook(request):
     try:    event_subtype= event['action']
     except: return HttpResponseBadRequest('Failed to identify event subtype')
     if (event_type, event_subtype) not in (('issues', 'opened'), ('issues', 'edited')):
-        return JsonResponse({
-            'ignored': f'{event_type}.{event_subtype}'
-        })
+        return JsonResponse({'ignored': f'{event_type}.{event_subtype}'})
     if 'issue' not in event:
         return HttpResponseBadRequest('Malformed POST body - no issue')
     if 'number' not in event['issue']:
