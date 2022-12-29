@@ -138,13 +138,13 @@ def handle_issues_opened(repo, event):
         base='main',
         head=branch,
     )
-
     return JsonResponse({
         'filespec': filespec.groups(),
         'instruction': instruction,
-def handle_review_comment_created(repo, event):
-    pass
 
     })
+
+def handle_review_comment_created(repo, event):
+    pass
 
 handle_issues_edited = handle_issues_opened
