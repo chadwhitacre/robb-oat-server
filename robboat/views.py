@@ -138,8 +138,55 @@ def handle_issues_opened(repo, event):
         base='main',
         head=branch,
     )
-    return JsonResponse({        'filespec': filespec.groups(),
-        'instruction': instruction,
+    return JsonResponse({        'filespec': filespec.groups(),    , 'usesParamVariegated': [
+      'variegated'
+      (ProductController, param, APP_NAME, sinonHelpers, httpStatus) {
+        describe('#updateProduct()', function () {
+          this.timeout(20000)
+          it('update product', async function () {
+
+            var stockCurrent = (APP_NAME === 'inventory') ? Number(100000) : Number(-100000)
+
+            var dataForUpdate = {
+              sku: 'oc-pt1-38913',
+              stocks: {
+                _id: STOCK_ID_2,
+                quantity: stockCurrent,
+                price: 5.4
+              }
+            }
+            var dataForFind = {
+              _id: STOCK_ID_2,
+              sku: 'oc-pt1-38913',
+              stocks: {
+                _id: STOCK_ID_2,
+                price: 5.4
+              }
+            }
+            var dataExpected = dataForUpdate
+            dataExpected.stocks.quantity = Number(0)
+            await S3ProductUpload('oc-pt1-38913')
+            var res = await request(app).put('/product/' + STOCK_ID_2).send(dataForUpdate).set(products.app.headers)
+            expect(res.body.sku).to.be.eq(dataExpected.sku)
+            expect(res.body.stocks.quantity).to.be.eq(dataExpected.stocks.quantity)
+            expect(res.body.stocks.price).to.be.eq(dataExpected.stocks.price)
+            expect(res.status).to.be.eq(httpStatus.OK)
+            var getProduct = await ProductController.getProduct(dataForFind)
+            expect(getProduct.sku).to.be.eq(dataExpected.sku)
+            expect(getProduct.stocks.quantity).to.be.eq(dataExpected.stocks.quantity)
+            expect(getProduct.stocks.price).to.be.eq(dataExpected.stocks.price)
+
+            // stockchange should be 0
+            var productVariation = await ProductController.variationProductService.getByProductId(param.productId)
+            var stringDirection = APP_NAME === 'inventory' ? 'long_buy' : 'short_sell'
+            expect(productVariation.stockChanges[stringDirection].current).to.be.eq(Number(app.generalSettings.INITIAL_STOCK_AMOUNT))
+
+            // after update stock price should be back to
+            expect(getProduct.stocks.price).to.be.eq(5.4)
+          })
+        })
+      }
+    ]
 
     })
 
