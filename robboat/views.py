@@ -145,4 +145,7 @@ def handle_issues_opened(repo, event):
         'instruction': instruction,
     })
 
+def handle_pull_request_review_comment(repo, event):
+    pass
+
 handle_issues_edited = handle_issues_opened
