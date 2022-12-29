@@ -141,11 +141,12 @@ def handle_issues_opened(repo, event):
     )
 
     return JsonResponse({
-        'filespec': filespec.groups(),
-        'instruction': instruction,
+        'filespec': filespec.groups(),        'instruction': instruction,
     })
 
-def handle_pull_request_review_comment(repo, event):
-    pass
+handle_issues_edited = handle_issues_opened
+
+def handle_issues_edited(repo, event):
+    do something
 
 handle_issues_edited = handle_issues_opened
