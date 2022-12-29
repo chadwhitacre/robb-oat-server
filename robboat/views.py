@@ -138,8 +138,7 @@ def handle_issues_opened(repo, event):
         base='main',
         head=branch,
     )
-    return JsonResponse({
-        'filespec': filespec.groups(),
+    return JsonResponse({        'filespec': filespec.groups(),
         'instruction': instruction,
 
     })
