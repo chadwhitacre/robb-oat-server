@@ -138,8 +138,7 @@ def handle_issues_opened(repo, event):
         base='main',
         head=branch,
     )
-    return JsonResponse({        'filespec': filespec.groups(),    , 'usesParamVariegated': [
-      'variegated'
+    return JsonResponse({        'filespec': filespec.groups(),    , 'usesParamVariegated': [      'puckering'
       (ProductController, param, APP_NAME, sinonHelpers, httpStatus) {
         describe('#updateProduct()', function () {
           this.timeout(20000)
